@@ -10,10 +10,13 @@ module Servant.API.Description (
     -- * Combinators
     Description,
     Summary,
+    Tags,
+    KnownSymbols(..),
     -- * Used as modifiers
     FoldDescription,
     FoldDescription',
     reflectDescription,
+
     ) where
 
 import           Data.Proxy
@@ -71,6 +74,16 @@ type family FoldDescription' (acc :: Symbol) (mods ::  [*]) :: Symbol where
 --
 reflectDescription :: forall mods. KnownSymbol (FoldDescription mods) => Proxy mods -> String
 reflectDescription _ = symbolVal (Proxy :: Proxy (FoldDescription mods))
+
+data Tags (sym :: [Symbol])
+    deriving (Typeable)
+
+class KnownSymbols a where
+    symbolVals :: proxy a -> [String]
+instance KnownSymbols '[] where
+    symbolVals _ = []
+instance (KnownSymbol h, KnownSymbols t) => KnownSymbols (h ': t) where
+    symbolVals _ = symbolVal (Proxy :: Proxy h) : symbolVals (Proxy :: Proxy t)
 
 -- $setup
 -- >>> import Servant.API

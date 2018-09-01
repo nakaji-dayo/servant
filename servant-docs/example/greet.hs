@@ -75,7 +75,7 @@ intro2 = DocIntro "This title is below the last"
 -- API specification
 type TestApi =
        -- GET /hello/:name?capital={true, false}  returns a Greet as JSON or PlainText
-       "hello" :> Capture "name" Text :> QueryParam "capital" Bool :> Get '[JSON, PlainText] Greet
+       Summary "hello endpoint summary" :> Description "hdesc" :> Tags '["t1", "tag2"] :> "hello" :> Capture "name" Text :> QueryParam "capital" Bool :> Get '[JSON, PlainText] Greet
 
        -- POST /greet with a Greet as JSON in the request body,
        --             returns a Greet as JSON

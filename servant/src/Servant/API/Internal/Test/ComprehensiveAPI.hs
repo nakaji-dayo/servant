@@ -44,6 +44,7 @@ type ComprehensiveAPIWithoutRaw =
   CaptureAll "foo" Int :> GET :<|>
   Summary "foo" :> GET :<|>
   Description "foo" :> GET :<|>
+  Tags '["foo", "bar"] :> GET :<|>
   EmptyAPI
 
 comprehensiveAPIWithoutRaw :: Proxy ComprehensiveAPIWithoutRaw

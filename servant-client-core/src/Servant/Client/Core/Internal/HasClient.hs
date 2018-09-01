@@ -46,7 +46,7 @@ import           Servant.API
                  IsSecure, MimeRender (mimeRender),
                  MimeUnrender (mimeUnrender), NoContent (NoContent), QueryFlag,
                  QueryParam', QueryParams, Raw, ReflectMethod (..), RemoteHost,
-                 ReqBody', ResultStream (..), SBoolI, Stream, Summary,
+                 ReqBody', ResultStream (..), SBoolI, Stream, Summary, Tags,
                  ToHttpApiData, Vault, Verb, WithNamedContext, contentType,
                  getHeadersHList, getResponse, toQueryParam, toUrlPiece)
 import           Servant.API.ContentTypes
@@ -390,6 +390,14 @@ instance HasClient m api => HasClient m (Summary desc :> api) where
 -- | Ignore @'Description'@ in client functions.
 instance HasClient m api => HasClient m (Description desc :> api) where
   type Client m (Description desc :> api) = Client m api
+
+  clientWithRoute pm _ = clientWithRoute pm (Proxy :: Proxy api)
+
+  hoistClientMonad pm _ f cl = hoistClientMonad pm (Proxy :: Proxy api) f cl
+
+-- | Ignore @'Tags'@ in client functions.
+instance HasClient m api => HasClient m (Tags tags :> api) where
+  type Client m (Tags tags :> api) = Client m api
 
   clientWithRoute pm _ = clientWithRoute pm (Proxy :: Proxy api)
 

@@ -72,7 +72,7 @@ import           Servant.API
                  QueryFlag, QueryParam', QueryParams, Raw,
                  ReflectMethod (reflectMethod), RemoteHost, ReqBody',
                  SBool (..), SBoolI (..), Stream, StreamGenerator (..),
-                 Summary, ToStreamGenerator (..), Vault, Verb,
+                 Summary, Tags, ToStreamGenerator (..), Vault, Verb,
                  WithNamedContext)
 import           Servant.API.ContentTypes
                  (AcceptHeader (..), AllCTRender (..), AllCTUnrender (..),
@@ -671,6 +671,13 @@ instance HasServer api ctx => HasServer (Description desc :> api) ctx where
 
   route _ = route (Proxy :: Proxy api)
   hoistServerWithContext _ pc nt s = hoistServerWithContext (Proxy :: Proxy api) pc nt s
+
+-- | Ignore @'Tags'@ in server handlers.
+instance HasServer api ctx => HasServer (Tags tags :> api) ctx where
+  type ServerT (Tags tags :> api) m = ServerT api m
+
+  route _ = route (Proxy :: Proxy api)
+  hoistServerWithContext _ = hoistServerWithContext (Proxy :: Proxy api)
 
 -- | Singleton type representing a server that serves an empty API.
 data EmptyServer = EmptyServer deriving (Typeable, Eq, Show, Bounded, Enum)
